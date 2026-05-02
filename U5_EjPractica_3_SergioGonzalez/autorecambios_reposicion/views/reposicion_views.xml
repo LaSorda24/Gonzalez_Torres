@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_autorecambios_reposicion_list" model="ir.ui.view">
+        <field name="name">autorecambios.reposicion.list</field>
+        <field name="model">autorecambios.reposicion</field>
+        <field name="arch" type="xml">
+            <list string="Solicitudes de reposicion">
+                <field name="name"/>
+                <field name="referencia_recambio"/>
+                <field name="fecha_solicitud"/>
+                <field name="cantidad"/>
+                <field name="tipo_prioridad"/>
+                <field name="importe_total"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_autorecambios_reposicion_form" model="ir.ui.view">
+        <field name="name">autorecambios.reposicion.form</field>
+        <field name="model">autorecambios.reposicion</field>
+        <field name="arch" type="xml">
+            <form string="Solicitud de reposicion">
+                <header>
+                    <button
+                        name="action_confirm"
+                        string="Confirmar"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state != 'draft'"
+                    />
+                    <button
+                        name="action_done"
+                        string="Finalizar"
+                        type="object"
+                        class="btn-success"
+                        invisible="state != 'confirmed'"
+                    />
+                    <button
+                        name="action_reset_draft"
+                        string="Volver a borrador"
+                        type="object"
+                        invisible="state == 'draft'"
+                    />
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,confirmed,done"
+                    />
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Datos generales">
+                            <field name="name"/>
+                            <field name="referencia_recambio"/>
+                            <field name="fecha_solicitud"/>
+                            <field name="solicitante"/>
+                        </group>
+                        <group string="Detalle de reposicion">
+                            <field name="tipo_prioridad"/>
+                            <field name="cantidad"/>
+                            <field name="precio_unitario"/>
+                            <field name="importe_total" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Motivo">
+                        <field name="descripcion"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_autorecambios_reposicion" model="ir.actions.act_window">
+        <field name="name">Solicitudes de reposicion</field>
+        <field name="res_model">autorecambios.reposicion</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p>
+                Crea una solicitud para registrar la necesidad de reponer
+                recambios en el almacen.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_autorecambios_root"
+        name="AutoRecambios"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_autorecambios_reposicion"
+        name="Solicitudes de reposicion"
+        parent="menu_autorecambios_root"
+        action="action_autorecambios_reposicion"
+        sequence="20"
+    />
+</odoo>
